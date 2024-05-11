@@ -6,7 +6,7 @@ const Comics = require("../models/bookModel");
 // first part getting all the books
 const getAllBooks = async (request, response, next) => {
   try {
-    await Book.find({}).then((books) => {
+    await Comics.find({}).then((books) => {
       response.status(200).json({ data: books });
     });
   } catch (error) {
@@ -19,7 +19,7 @@ const getAllBooks = async (request, response, next) => {
 const getBook = async (request, response, next) => {
   const { id } = request.params;
   try {
-    await Book.findOne({ _id: id }).then((foundBook) => {
+    await Comics.findOne({ _id: id }).then((foundBook) => {
       res.status(200).json({ data: foundBook });
     });
   } catch (error) {
