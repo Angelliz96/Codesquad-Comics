@@ -10,11 +10,9 @@ const cors = require("cors");
 const helmet = require("helmet");
 const session = require("express-session");
 const passport = require("passport");
-
 app.use(morgan("dev"));
 const bookRoutes = require("./routes/bookRoutes");
 const authRoutes = require('./routes/authRoutes');
-
 // app.use('/', authRoutes);
 
 //Middleware
@@ -23,7 +21,6 @@ app.use(helmet())
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, "/public")));
-
 app.use(
   session({ 
     secret: process.env.SECRET_KEY, 
@@ -33,7 +30,6 @@ app.use(
 );
 app.use(passport.initialize());
 app.use(passport.session());
-
 //GET routes
 
 app.get("/", (request, response, next) => {
