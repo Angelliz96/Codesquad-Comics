@@ -1,6 +1,7 @@
 // const { request, response } = require("express");
 
 
+const { ObjectId } = require("mongodb");
 const Comics = require("../models/bookModel");
 
 // first part getting all the books
@@ -19,13 +20,22 @@ const getAllBooks = async (request, response, next) => {
 const getBook = async (request, response, next) => {
   const { id } = request.params;
   try {
-    await Comics.findOne({ _id: id }).then((foundBook) => {
-      res.status(200).json({ data: foundBook });
-    });
+    const foundBook = await Comics.findOne({ _id: ObjectId(id)});
+    if (!foundBook) {
+      return response.status(404).json({ error: 'Book not found' });
+    }
+    response.status(200).json({ data: foundBook });
   } catch (error) {
     next(error);
   }
-};
+}; 
+//     .then((foundBook) => {
+//       res.status(200).json({ data: foundBook });
+//     });
+//   } catch (error) {
+//     next(error);
+//   }
+// };
 
 //create a book
 
