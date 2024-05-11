@@ -53,10 +53,11 @@ const createBook = async (request, response, next) => {
     synopsis: synopsis,
   });
 
-  // await newBook.save();
-  booksData.push(newBook);
+
+  // booksData.push(newBook);
 
   try {
+    await newBook.save();
     response.status(201).json({
       success: {
         message: "A new book is created",
