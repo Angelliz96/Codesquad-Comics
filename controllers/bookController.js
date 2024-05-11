@@ -1,14 +1,14 @@
 // const { request, response } = require("express");
 
 
-const { ObjectId } = require("mongodb");
+// const { ObjectId } = require("mongodb");
 const Comics = require("../models/bookModel");
 
 // first part getting all the books
 const getAllBooks = async (request, response, next) => {
   try {
-    await Comics.find({}).then((books) => {
-      response.status(200).json({ data: books });
+    await Comics.find({}).then((comics) => {
+      response.status(200).json({ data: comics });
     });
   } catch (error) {
     next(error);
@@ -17,26 +17,25 @@ const getAllBooks = async (request, response, next) => {
 
 // getting a specific book
 
-const getBook = async (request, response, next) => {
-  const { id } = request.params;
-  try {
-    const foundBook = await Comics.findOne({ _id: ObjectId(id) });
-    if (!foundBook) {
-      return response.status(404).json({ error: 'Book not found' });
-    }
-    response.status(200).json({ data: foundBook });
-  } catch (error) {
-    next(error);
-  }
-}; 
-//     .then((foundBook) => {
-//       res.status(200).json({ data: foundBook });
-//     });
-//   } catch (error) {
-//     next(error);
-//   }
-// };
+const getBook = async (req, res, next) => {
+  const { id } = req.params; 
 
+  //const foundBook = Book.find(book => book.id === Number(id));
+  //the above code should be commented out CCS-7
+  try {
+    await Comics.findOne({ _id: id }).then((foundBook) => {
+      res.status(200).json({
+        success: { message: "Found the book!" },
+        data: foundBook, //Within the json component, change the data value to foundBook
+        statusCode: 200,
+      });
+    });
+  } catch (err) {
+      res
+        .status(400)
+        .json({ error: { message: "Something went wrong retrieving a book!" }, statusCode: 400 });
+  }
+}
 //create a book
 
 const createBook = async (request, response, next) => {
@@ -95,7 +94,7 @@ const editBook = async (request, response, next) => {
     //   { new: true }
     // );
 
-    const findBook = booksData.find((book) => book.id === Number(id));
+    const findBook = booksData.find((comics) => comics.id === Number(id));
     console.log(findBook);
     findBook.title = title;
     response.status(201).json({
