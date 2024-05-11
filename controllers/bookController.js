@@ -1,7 +1,7 @@
 // const { request, response } = require("express");
 
 // const booksData = require("../data/data-1");
-const Book = require("../models/bookModel");
+const Comics = require("../models/bookModel");
 
 // first part getting all the books
 const getAllBooks = async (request, response, next) => {
