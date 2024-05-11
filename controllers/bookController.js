@@ -42,7 +42,8 @@ const createBook = async (request, response, next) => {
   const { title, author, publisher, genre, pages, rating, synopsis } =
     request.body; // parameters including in the new object
 
-  const newBook = {
+  const newBook =
+  new Comics( {
     title: title,
     author: author,
     publisher: publisher,
@@ -50,7 +51,7 @@ const createBook = async (request, response, next) => {
     pages: pages,
     rating: rating,
     synopsis: synopsis,
-  };
+  });
 
   // await newBook.save();
   booksData.push(newBook);
