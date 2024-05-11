@@ -20,7 +20,7 @@ const getAllBooks = async (request, response, next) => {
 const getBook = async (request, response, next) => {
   const { id } = request.params;
   try {
-    const foundBook = await Comics.findOne({id: ObjectId(id)});
+    const foundBook = await Comics.findOne({ _id: ObjectId(id) });
     if (!foundBook) {
       return response.status(404).json({ error: 'Book not found' });
     }
