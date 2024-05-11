@@ -1,6 +1,6 @@
 // const { request, response } = require("express");
 
-// const booksData = require("../data/data-1");
+
 const Comics = require("../models/bookModel");
 
 // first part getting all the books
