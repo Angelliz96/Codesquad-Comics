@@ -9,8 +9,8 @@ const getAllBooks = async (request, response, next) => {
   }
 };
 
-const getBook = async (req, res, next) => {
-  const { id } = req.params; 
+const getBook = async (request, response, next) => {
+  const { id } = request.params; 
 
   try {
     const foundBook = await Comics.findById(id);
@@ -20,13 +20,13 @@ const getBook = async (req, res, next) => {
         statusCode: 404
       });
     }
-    res.status(200).json({
-      success: { message: "Found the book!" },
+    response.status(200).json({
+      success: { message: "Found the book!!!"},
       data: foundBook,
       statusCode: 200,
     });
   } catch (err) {
-    res.status(500).json({
+    response.status(500).json({
       error: { message: "Something went wrong retrieving a book!" },
       statusCode: 500
     });
