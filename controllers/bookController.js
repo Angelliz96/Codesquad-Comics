@@ -1,39 +1,43 @@
-// const { request, response } = require("express");
+const Comics = require("../models/bookModel");
 
-// const booksData = require("../data/data-1");
-const Book = require("../models/bookModel");
-
-// first part getting all the books
 const getAllBooks = async (request, response, next) => {
   try {
-    await Book.find({}).then((books) => {
-      response.status(200).json({ data: books });
-    });
+    const comics = await Comics.find({});
+    response.status(200).json({ data: comics });
   } catch (error) {
     next(error);
   }
 };
-
-// getting a specific book
 
 const getBook = async (request, response, next) => {
-  const { id } = request.params;
-  try {
-    await Book.findOne({ _id: id }).then((foundBook) => {
-      res.status(200).json({ data: foundBook });
-    });
-  } catch (error) {
-    next(error);
-  }
-};
+  const { id } = request.params; 
 
-//create a book
+  try {
+    const foundBook = await Comics.findById(id);
+    if (!foundBook) {
+      return res.status(404).json({
+        error: { message: "Book not found" },
+        statusCode: 404
+      });
+    }
+    response.status(200).json({
+      success: { message: "Found the book!!!"},
+      data: foundBook,
+      statusCode: 200,
+    });
+  } catch (err) {
+    response.status(500).json({
+      error: { message: "Something went wrong retrieving a book!" },
+      statusCode: 500
+    });
+  }
+}
 
 const createBook = async (request, response, next) => {
   const { title, author, publisher, genre, pages, rating, synopsis } =
-    request.body; // parameters including in the new object
+    request.body;
 
-  const newBook = {
+  const newBook = new Comics({
     title: title,
     author: author,
     publisher: publisher,
@@ -41,12 +45,10 @@ const createBook = async (request, response, next) => {
     pages: pages,
     rating: rating,
     synopsis: synopsis,
-  };
-
-  // await newBook.save();
-  booksData.push(newBook);
+  });
 
   try {
+    await newBook.save();
     response.status(201).json({
       success: {
         message: "A new book is created",
@@ -62,38 +64,33 @@ const createBook = async (request, response, next) => {
   }
 };
 
-//EDIT BOOK
 const editBook = async (request, response, next) => {
   const { id } = request.params;
   const { title, author, publisher, genre, pages, rating, synopsis } =
     request.body;
 
   try {
-    // await booksData.findByIdAndUpdate(
-    //   {id},
-    //   {
-    //     $set: {
-    //       title,
-    //       author,
-    //       publisher,
-    //       genre,
-    //       pages,
-    //       rating,
-    //       synopsis,
-    //     },
-    //   },
-    //   { new: true }
-    // );
+    const updatedBook = await Comics.findByIdAndUpdate(id, {
+      title,
+      author,
+      publisher,
+      genre,
+      pages,
+      rating,
+      synopsis,
+    }, { new: true });
 
-    const findBook = booksData.find((book) => book.id === Number(id));
-    console.log(findBook);
-    findBook.title = title;
-    response.status(201).json({
-      success: {
-        message: "Book is updated",
-      },
-      data: findBook,
-      statusCode: 201,
+    if (!updatedBook) {
+      return res.status(404).json({
+        error: { message: "Book not found" },
+        statusCode: 404
+      });
+    }
+
+    response.status(200).json({
+      success: { message: "Book is updated" },
+      data: updatedBook,
+      statusCode: 200,
     });
   } catch (error) {
     response.status(400).json({
@@ -103,15 +100,18 @@ const editBook = async (request, response, next) => {
   }
 };
 
-//DELETE BOOKS
-
 const deleteBook = async (request, response, next) => {
   const { id } = request.params;
 
   try {
-    // await booksData.findByIdAndDelete({ id });
-    const filterBooks = booksData.filter((book) => book.id != id);
-    console.log(filterBooks);
+    const deletedBook = await Comics.findByIdAndDelete(id);
+    if (!deletedBook) {
+      return res.status(404).json({
+        error: { message: "Book not found" },
+        statusCode: 404
+      });
+    }
+
     response.status(200).json({
       success: "Book deleted successfully!",
       statusCode: 200,

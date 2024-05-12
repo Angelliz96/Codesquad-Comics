@@ -45,6 +45,6 @@ image:{
 
 });
 
-const Book = mongoose.model("Book", bookSchema);
+const Comics = mongoose.model("Comics", bookSchema);
 
-module.exports = Book;
+module.exports = Comics;
