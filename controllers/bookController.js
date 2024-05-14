@@ -1,12 +1,15 @@
-const Comics = require("../models/bookModel");
+const Books = require("../models/bookModel");
+const siteData = require("../data/data-1")
+
 
 const getAllBooks = async (request, response, next) => {
-  try {
-    const comics = await Comics.find({});
-    response.status(200).json({ data: comics });
-  } catch (error) {
-    next(error);
-  }
+  await Books.find({}).then((books) =>
+  response.status(200).json({
+    success: { message: "This route points to the Books page with all of the books" },
+    data: books,
+    statusCode: 200,
+  })
+  )
 };
 
 const getBook = async (request, response, next) => {
@@ -15,13 +18,13 @@ const getBook = async (request, response, next) => {
   try {
     const foundBook = await Comics.findById(id);
     if (!foundBook) {
-      return res.status(404).json({
+      return response.status(404).json({
         error: { message: "Book not found" },
         statusCode: 404
       });
     }
     response.status(200).json({
-      success: { message: "Found the book!!!"},
+      success: { message: "Found the book!!"},
       data: foundBook,
       statusCode: 200,
     });
@@ -81,7 +84,7 @@ const editBook = async (request, response, next) => {
     }, { new: true });
 
     if (!updatedBook) {
-      return res.status(404).json({
+      return response.status(404).json({
         error: { message: "Book not found" },
         statusCode: 404
       });
