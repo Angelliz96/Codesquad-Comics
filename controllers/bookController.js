@@ -16,7 +16,7 @@ const getBook = async (request, response, next) => {
   const { id } = request.params; 
 
   try {
-    const foundBook = await Comics.findById(id);
+    const foundBook = await Books.findById(id);
     if (!foundBook) {
       return response.status(404).json({
         error: { message: "Book not found" },
