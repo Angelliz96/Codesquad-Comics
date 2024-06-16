@@ -107,7 +107,7 @@ const deleteBook = async (request, response, next) => {
   const { id } = request.params;
 
   try {
-    const deletedBook = await Comics.findByIdAndDelete(id);
+    const deletedBook = await Books.findByIdAndDelete(id);
     if (!deletedBook) {
       return res.status(404).json({
         error: { message: "Book not found" },
